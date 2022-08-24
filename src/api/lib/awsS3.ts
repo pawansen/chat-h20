@@ -15,7 +15,7 @@ const s3 = new AWS.S3({
 export function s3UploadBase64(folder:string,bufEncode:any,fileName:string,callback:any) {
   try {
               const params:any = {
-                  Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "petapp",
+                  Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "chatapp",
                   Key: folder+"/"+fileName, 
                   Body: bufEncode,
                   ContentEncoding: 'base64',
@@ -43,7 +43,7 @@ export function s3Upload(folder:string,file: any, callback:any) {
     try {
                 const fileStream = fs.createReadStream(file[0].path);
                 const params:any = {
-                    Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "petapp",
+                    Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "chatapp",
                     Key: folder+"/"+file[0].filename, 
                     Body: fileStream
                 };
@@ -71,7 +71,7 @@ export function s3UploadMultiple(folder:string,file: any, callback:any) {
                 file.map((item:any) => {
                     const fileStream = fs.createReadStream(item.path);
                     var params = {
-                      Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "curlytales",
+                      Bucket: (env.AWS_BUCKET_NAME !== undefined) ? env.AWS_BUCKET_NAME : "chatapp",
                       Key: folder+"/"+item.filename, 
                       Body: fileStream
                 };

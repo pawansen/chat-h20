@@ -2,6 +2,7 @@ import { env } from '../../env'
 import express from 'express'
 import bodyParser from 'body-parser'
 import Socket from '../../../api/interface/controllers/app/chat/chatController'
+import { generateQR } from '../../../api/interface/controllers/app/chat/qrController'
 import { createRouter } from './v1/routes'
 import {logger, loggerFile} from '../../../api/lib/logger'
 const app = express();

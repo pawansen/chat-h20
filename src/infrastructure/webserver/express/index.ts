@@ -5,6 +5,7 @@ import Socket from '../../../api/interface/controllers/app/chat/chatController'
 import { generateQR } from '../../../api/interface/controllers/app/chat/qrController'
 import { createRouter } from './v1/routes'
 import {logger, loggerFile} from '../../../api/lib/logger'
+import path from 'path'
 const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
@@ -21,8 +22,12 @@ app.use(bodyParser.json({limit: '50mb'}));
 /* For parsing urlencoded data */
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 
- /** add header */
- app.use(function(req,res,next){
+// view engine setup
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
+/** add header */
+app.use(function(req,res,next){
     if(env.NODE_ENV == "development"){
         /** set logger every http request */
         loggerFile.info(req.originalUrl);
@@ -48,14 +53,26 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
     }
 });
 
-
+app.get("/", function(req, res) {
+	res.render('index.ejs');
+});
 
 app.get("/chat", function(req, res) {
-	res.render('chat.ejs');
+	res.render('chat-inbox.ejs');
 });
+
+
+app.get("/connect", function(req, res) {
+    generateQR((err:any,s3File:any)=>{
+        console.log(s3File)
+        res.render('connect.ejs',{ QrCode: s3File.QrCode, QrImage:s3File.Location });
+    })
+});
+
 
 io.on("connection", function(socket: any) {
     console.log("Socket connected");
+    logger.info(socket.id);
     new Socket(socket,io.sockets);
 });
 

@@ -25,7 +25,7 @@
     </form>
      <div id="conversation"></div>
     <script>
-            var socket = io.connect('http://localhost:3001/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyY2MwZTM3Y2FiZDVhYWI1ZmZhOGYwZCIsInVzZXJJZCI6IjYyY2MwZTM3Y2FiZDVhYWI1ZmZhOGYwZCIsImZ1bGxOYW1lIjoic29oaWwgamFpbiIsInN0YXR1cyI6IkFjdGl2ZSIsImZjbVRva2VuIjoiZGFpVl8zN0NTR213cWhHQ2tHdWlFdDpBUEE5MWJHUlNJUXRWYWRqTkZBWVdzVjNQYW80Nm51dm1fTUZyNTM4aHdlX1dqUmw3VUczY2hZZW9peTh0S2c0MFJ5WWNpWmVaU0NoZ2x6bUdNOWRMQ0k5VWswQUI5TlVNV0twTmtzQm1nUUlZR1ZCeTZBUWxZSGpYdVVrVjVhTG0zY0xfa1E3Z3FCSSIsImRldmljZVR5cGUiOiJBbmRyb2lkIiwiaWF0IjoxNjU5NjgyNDU4LCJleHAiOjE2NTk3Njg4NTh9.3TDN6QEV7lZ4EdEASowtNsBvYkK3EAsBHSM5VnVU4p8');
+            var socket = io.connect('http://localhost:3001');
             var typing=false;
             var timeout=undefined;
             var user;
@@ -43,7 +43,7 @@
 
                //socket.emit('chat_notification_config', {userId:"624eb6304b2fcaf1d66ac5f4",chatRoomId:"626fb68f96fd6f8080773848"});
 
-              socket.emit('chat_message_room', {"userId":"62c67a5faf249c60579091ca","message":$('#txt').val(),"chatId":"62f0edf792f7a73789897141","fullName":"abc123","profilePic":"","messageType":"text","replayOnMessageId":""});
+              //socket.emit('chat_message_room', {"userId":"62c67a5faf249c60579091ca","message":$('#txt').val(),"chatId":"62f0edf792f7a73789897141","fullName":"abc123","profilePic":"","messageType":"text","replayOnMessageId":""});
 
                //socket.emit('chat_message_box', {"chatRoomId":"62bc1c6f09c98c363c9115da","limit":"10","pageNo":"0","userId":"111111"});
 

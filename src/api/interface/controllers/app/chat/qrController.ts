@@ -26,8 +26,18 @@ export const generateQR = async (callback:any) =>{
     const fileName = "CHAT-QR-"+qrCode+".png";
     const bufferImage = await QRCode.toDataURL(qrCode,qrOption);
     let buf:any = Buffer.from(bufferImage.replace(/^data:image\/\w+;base64,/, ""),'base64')
-    s3UploadBase64('store',buf,fileName,(err:any,responseFile:any)=>{             
+    /*s3UploadBase64('store',buf,fileName,(err:any,responseFile:any)=>{   
+        responseFile.QrCode =  qrCode;      
         callback(null,responseFile);
-    })
+    })*/
+    callback(null,{
+        ETag: '"79644753e4048926b6d3e7c033017b17"',
+        Location: 'https://jom-app-local.s3.us-east-2.amazonaws.com/store/CHAT-QR-Nz0dzC761661506662.png',
+        key: 'store/CHAT-QR-Nz0dzC761661506662.png',
+        Key: 'store/CHAT-QR-Nz0dzC761661506662.png',
+        Bucket: 'jom-app-local',
+        QrCode: 'Nz0dzC761661506662'
+      }
+      );
     
 }

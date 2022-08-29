@@ -7,14 +7,14 @@ import {
     pushNotificationRequest,
     insertNotificationRequest
 } from '../domain/entities/notification.entity'
-import { createNotification } from '../domain/services/notification.service'
+//import { createNotification } from '../domain/services/notification.service'
 import { Request, Response } from "express"
 const fcm = new FCM(env.FCM_SERVER_KEY);
 import  axios  from "axios"
 import * as appRoot from "app-root-path";
 const sgMail = require('@sendgrid/mail')
 
-sgMail.setApiKey('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')
+sgMail.setApiKey('SG.******.a9eEUnoW10RQgX2EhjlSbSwKMenWC1Dw-CeUjOxF8X8')
 /**
  * push notification
  * * @param {string} value
@@ -121,9 +121,9 @@ export function sentTextNotification(dataObj: textNotificationRequest, callback:
 */
 export function sentTextSMS(Request: any, dataObj: any, callback: any) {
 axios.put(
-        "http://api.trumpia.com/rest/v1/vikaslms/mobilemessage",
+        "http://api.trumpia.com/rest/v1/****/mobilemessage",
         {
-            "sender": "8445667676",
+            "sender": "*****",
             "country_code": dataObj['country_code'],
             "mobile_number": dataObj['mobile_number'],
             "message":
@@ -133,7 +133,7 @@ axios.put(
         },
         {headers: {
 
-            'X-Apikey': '3408ed77f870b4a7f856d871bf547520',
+            'X-Apikey': '****',
 
             'Content-Type': 'application/json'
 
@@ -153,7 +153,7 @@ axios.put(
 */
 export function sentEmailTrumpia(Request: any, dataObj: any, callback: any) {
     axios.put(
-            "http://api.trumpia.com/rest/v1/vikaslms/authentication/email",
+            "http://api.trumpia.com/rest/v1/*****/authentication/email",
             {
                 "to_addr" : dataObj['to_addr'],
                 "from_addr" : dataObj['from_addr'],
@@ -161,7 +161,7 @@ export function sentEmailTrumpia(Request: any, dataObj: any, callback: any) {
             },
             {headers: {
     
-                'X-Apikey': '3408ed77f870b4a7f856d871bf547520',
+                'X-Apikey': '******',
     
                 'Content-Type': 'application/json'
     

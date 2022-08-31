@@ -16,7 +16,7 @@ export const randomNumber = function (length:number) {
 		var sup = Math.floor(Math.random() * possible.length);
 		text += i > 0 && sup == i ? "0" : possible.charAt(sup);
 	}
-	return Number(Math.floor(1000 + Math.random() * 9000));
+	return text;
 };
 
 export const getRandom = function (length:number) {

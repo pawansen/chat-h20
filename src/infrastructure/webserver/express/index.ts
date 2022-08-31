@@ -1,6 +1,7 @@
 import { env } from '../../env'
 import express from 'express'
 import bodyParser from 'body-parser'
+import { dbConnectionCreate } from '../../../api/config/db'
 import Socket from '../../../api/interface/controllers/app/chat/chatController'
 import { generateQR } from '../../../api/interface/controllers/app/chat/qrController'
 import { createRouter } from './v1/routes'
@@ -53,11 +54,15 @@ app.use(function(req,res,next){
     }
 });
 
-app.get("/", function(req, res) {
+/** create database connection */
+dbConnectionCreate();
+
+app.get("/app", function(req, res) {
 	res.render('index.ejs');
 });
 
 app.get("/chat", function(req, res) {
+    console.log(req.query.id)
 	res.render('chat-inbox.ejs');
 });
 
@@ -69,10 +74,21 @@ app.get("/connect", function(req, res) {
     })
 });
 
+app.get("/test", function(req, res) {
+    res.render('chat.ejs');
+});
+
 
 io.on("connection", function(socket: any) {
     console.log("Socket connected");
     logger.info(socket.id);
+
+    //io.emit('joined', {username: "yogesh"});
+
+    // socket.on('event1', function(requestData:any){
+    //     console.log('requestData',requestData)
+    // });
+
     new Socket(socket,io.sockets);
 });
 

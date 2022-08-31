@@ -45,7 +45,7 @@ export class Constants {
     }
 
     public static readonly TABLES ={
-        USER:'users'
+        CHAT_USERS:'chat_users'
     }
   
   }

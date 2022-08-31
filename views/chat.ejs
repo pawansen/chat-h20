@@ -14,7 +14,7 @@
         .red { color:red; }
         .green { color:green; }
     </style>
-    <script src="../../socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.0.2/socket.io.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   </head>
   <body>
@@ -25,7 +25,8 @@
     </form>
      <div id="conversation"></div>
     <script>
-            var socket = io.connect('http://localhost:3001');
+            var socket = io.connect('http://159.223.51.198:3000');
+            console.log("socket",socket)
             var typing=false;
             var timeout=undefined;
             var user;
@@ -65,7 +66,8 @@
 
            // socket.emit('user_status', {"userId":"60a4c89faac5b01c8db17d51"});
 
-            socket.on('chat_message_box', function(msg){
+            socket.on('joined', function(msg){
+                console.log('joined joined joined');
                  console.log(msg);
             });
 

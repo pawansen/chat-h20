@@ -33,10 +33,11 @@
              	<div class="col-md-4">
              		<div class="qr-code">
              			<label>Your Id</label>
-             			<div class="imgdiv">
-							<img src='<%= QrImage %>'>
+             			<div class="imgdiv" id="qrCodeImage">
+						
              			</div>
-             			<span>Your ID : <%= QrCode %></span>
+             			<span>Your ID : <div id="qrCode"></div></span>
+						
              		</div>
              	</div>
              </div>
@@ -50,7 +51,7 @@
     					<label>Remote ID</label>
     					<div class="form-group">
     					<form action="/chat" method="get">
-    						<input type="text" name="id" class="form-control" placeholder="Enter Remote ID">
+    						<input type="text" name="id" id="QrId" class="form-control" placeholder="Enter Remote ID">
 							<input type="submit" class="submit">
     					</form>
     				</div>
@@ -62,6 +63,104 @@
 </main>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.0.2/socket.io.min.js"></script>
+		<script>
+			var socket = io.connect('http://localhost:3000');
+            //var socket = io.connect('http://159.223.51.198:3000');
+            console.log("socket",socket)
+            var typing=false;
+            var timeout=undefined;
+            var user;
+            // submit text message without reload/refresh the page
+            $('form').submit(function(e){
+                e.preventDefault(); // prevents page reloading
+              //socket.emit('chat_message', $('#txt').val());
+               socket.emit('join_room', {fromToken:"1111",toToken:$('#QrId').val()});
+                //$('#txt').val('');
+                return false;
+            });
+            socket.on("join_room",function(answer){
+              console.log("join_room",answer);
+            });
+
+          socket.emit('qr_code', {}); 
+          socket.on("qr_code",function(qrCode){
+            $('#qrCodeImage').html("<img src="+qrCode.response.QrImage+"></>");
+            $('#qrCode').text(qrCode.response.QrCode);
+          })
+
+           // socket.emit('user_status', {"userId":"60a4c89faac5b01c8db17d51"});
+
+            socket.on('joined', function(msg){
+                console.log('joined joined joined');
+                 console.log(msg);
+            });
+
+            // append the chat text message
+            socket.on('chat_message_room', function(msg){
+                console.log("chat_message_room",msg)
+                $('#messages').append($('<li>').html("<span class='red'>"+msg.fullName+": <span class='green'>"+msg.message+"</span></span>"));
+                console.log(msg);
+            });
+            socket.on('chat_message', function(msg){
+                //$('#messages').append($('<li>').html(msg));
+            });
+            // append text if someone is online
+            // socket.on('is_online', function(username) {
+            //     $('#messages').append($('<li>').html(username));
+            // });
+            socket.on("get_all_chat_users_single",function(Response){
+                console.log("get_all_chat_users_single",Response);
+            });
+
+            socket.on("get_all_chat_users",function(Response){
+                console.log("get_all_chat_users",Response);
+            });
+
+            socket.on('chat_room', function (data) {
+                //$('#conversation').append('<b>' + data + '<br>');
+                console.log("chat_room");
+                console.log(data);
+                console.log("chat_room");
+            });
+
+               $('#message-box').keypress((e)=>{
+                if(e.which!=13){
+                  typing=true
+                  //socket.emit('typing', {user:user, typing:true})
+
+                  socket.emit('typing', {userId:"60a4c74ce4d0882970059452",typing:true,chatRoomId:"62a1ee1bfb1ea33c35ecac57",username:"test",profilePic:"url"});  
+
+                  clearTimeout(timeout)
+                  timeout=setTimeout(typingTimeout, 3000)
+                }else{
+                  clearTimeout(timeout)
+                  typingTimeout()
+                  //sendMessage() function will be called once the user hits enter
+                  sendMessage()
+                }
+              })
+
+               function isTyping(){
+                  typing=true
+                  //socket.emit('typing', {user:user, typing:true})
+                  socket.emit('typing', {userId:"60a4c74ce4d0882970059452",typing:true,chatId:"60d58dd7a011f4424f29e12f",username:"mylon",profilePic:"url"});  
+                  //clearTimeout(timeout)
+                  //timeout=setTimeout(typingTimeout, 3000)
+               }
+                               
+              //code explained later
+              socket.on('typing', (data)=>{
+                //console.log(data);
+                if(data.typing==true)
+                  $('.typing').text(`${data.username} is typing...`)
+                else
+                     $('.typing').text(`${data.username} is typing...`)
+              })
+            // ask username
+            //var username = prompt('Please tell me your name');
+            // socket.emit('online', {userId:"60a4c74ce4d0882970059452",token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYTRjNzRjZTRkMDg4Mjk3MDA1OTQ1MiIsInVzZXJJZCI6IjYwYTRjNzRjZTRkMDg4Mjk3MDA1OTQ1MiIsImZ1bGxOYW1lIjoiTXlsb24gTGVlIiwiZW1haWwiOiJteWxvbmxlZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Im15bG9ubGVlIiwicGhvbmVObyI6Ijk5ODUwMDI1ODUiLCJzdGF0dXMiOnRydWUsImlhdCI6MTYyNDUyODcwMCwiZXhwIjoxNjI3MTIwNzAwfQ.bGZQsGKwv0HirG_WNKa9rsVqw8jaxc4pqn8oNLY5Ifw"});  
+                                                                                             
+    </script>
 </body>
 </html>

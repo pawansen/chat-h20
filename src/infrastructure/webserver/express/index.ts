@@ -68,10 +68,11 @@ app.get("/chat", function(req, res) {
 
 
 app.get("/connect", function(req, res) {
-    generateQR((err:any,s3File:any)=>{
+    /*generateQR((err:any,s3File:any)=>{
         console.log(s3File)
         res.render('connect.ejs',{ QrCode: s3File.QrCode, QrImage:s3File.Location });
-    })
+    })*/
+    res.render('connect.ejs');
 });
 
 app.get("/test", function(req, res) {

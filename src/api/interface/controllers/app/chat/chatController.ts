@@ -10,12 +10,12 @@ import { generateQR } from '../chat/qrController'
 import  mongoose  from 'mongoose'
 /** Object id data type */
 const ObjectId = mongoose.Types.ObjectId;
-
+let userConnectionList: any = [];
 export default class Socket {
     constructor(socket:any,io:any) {
             var self = this;
             let users: any = [];
-
+        
             /**
 			 * To manage user generate qr code
 			 * @param {string} userId
@@ -24,10 +24,30 @@ export default class Socket {
             socket.on('qr_code', function(requestData:any){
                 var token: string = requestData.token;
                 generateQR((err:any,s3File:any)=>{
-                    io.emit("qr_code",{status:1,"message":lan['User status updated successfully'],'response':{ QrCode: s3File.QrCode, QrImage:s3File.Location }})
+                    userConnectionList.push({
+                        id:socket.id,
+                        qrCode:s3File.QrCode,
+                        qrImage:s3File.Location,
+                        status:false
+                    })
+                    io.to(socket.id).emit("qr_code",{status:1,"message":lan['User status updated successfully'],'response':{ QrCode: s3File.QrCode, QrImage:s3File.Location }})
                 })
             });
 
+            /**
+			 * To manage user disconnect
+			 * @param {string} userId
+			*/
+	 	    socket.on("disconnect",function(requestData:any){
+                var token = requestData.token;
+                for (var i = userConnectionList.length - 1; i >= 0; --i) {
+                    if (userConnectionList[i].id == socket.id) {
+                        userConnectionList.splice(i,1);
+                    }
+                }
+                io.to(socket.id).emit("disconnect_data",{status:1,"message":lan['User status updated successfully'],'response':requestData});
+            });
+            
 
             /**
              * To manage user generate qr code
@@ -35,15 +55,20 @@ export default class Socket {
              * @param {string} token
             */
             socket.on('join_room', function(requestData:any){
+                console.log("join==",requestData)
                 let fromToken: any = requestData.fromToken;
                 let toToken : any = requestData.toToken;
-                var user:any = {};
-                user[socket.id] = fromToken
-                let roomname = fromToken+toToken;
-                if(users[roomname]){
-                    users[roomname].push(user);
+                let flag : boolean = false;
+                for (var i = userConnectionList.length - 1; i >= 0; --i) {
+                        if (userConnectionList[i].qrCode == toToken) {
+                            flag = true;
+                            continue;
+                        }
+                }
+                if(flag){
+                    io.to(socket.id).emit("join_room",{status:1,"message":"Room created",'response':requestData});
                 }else{
-                    users[roomname] = [user];
+                    io.to(socket.id).emit("join_room",{status:0,"message":"Invalid QR code"});
                 }
 
             });
@@ -65,7 +90,7 @@ export default class Socket {
 			 * @param {string} userId
 			 * @param {string} token
 			*/
-            socket.on('join_room', function(requestData:any){
+            /*socket.on('join_room', function(requestData:any){
                 var token: string = requestData.token;
                 requestData.socketID = socket.id;
                 const user = {
@@ -77,7 +102,7 @@ export default class Socket {
 
 
                 io.emit("join_room",{status:1,"message":lan['User status updated successfully'],'response':requestData})
-            });
+            });*/
 
             /**
 			 * To manage user typing
@@ -87,17 +112,9 @@ export default class Socket {
                 var token: string = requestData.token;
                 io.emit("typing",{status:1,"message":"typing",'response':requestData});
             });
-            
+        
 
-            /**
-			 * To manage user disconnect
-			 * @param {string} userId
-			*/
-	 	    socket.on("disconnect",function(requestData:any){
-                var token = requestData.token;
-                console.log("socket disconnected")
-                io.emit("disconnect_data",{status:1,"message":lan['User status updated successfully'],'response':requestData});
-            });
+            
     }
 
 }

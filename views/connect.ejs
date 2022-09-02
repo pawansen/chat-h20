@@ -51,6 +51,7 @@
     					<label>Remote ID</label>
     					<div class="form-group">
     					<form action="/chat" method="get">
+                <input type="hidden" name="fromId" id="fromId" class="form-control" placeholder="Enter Remote ID">
     						<input type="text" name="id" id="QrId" class="form-control" placeholder="Enter Remote ID">
 							<input type="submit" class="submit">
     					</form>
@@ -75,7 +76,7 @@
             $('form').submit(function(e){
                 e.preventDefault(); // prevents page reloading
               //socket.emit('chat_message', $('#txt').val());
-               socket.emit('join_room', {fromToken:"1111",toToken:$('#QrId').val()});
+               socket.emit('join_room', {fromToken:$('#fromId').val(),toToken:$('#QrId').val()});
                 //$('#txt').val('');
                 return false;
             });
@@ -87,12 +88,18 @@
           socket.on("qr_code",function(qrCode){
             $('#qrCodeImage').html("<img src="+qrCode.response.QrImage+"></>");
             $('#qrCode').text(qrCode.response.QrCode);
+            $('#fromId').val(qrCode.response.QrCode);
           })
 
            // socket.emit('user_status', {"userId":"60a4c89faac5b01c8db17d51"});
 
-            socket.on('joined', function(msg){
-                console.log('joined joined joined');
+            socket.on('join_room', function(msg){
+                console.log('join_room joined joined');
+                 console.log(msg);
+            });
+
+            socket.on('roomData', function(msg){
+                console.log('roomData joined joined');
                  console.log(msg);
             });
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import {logger} from '../../../../lib/logger'
 import lan from '../../../../locales/en.json';
 import { ErrorResponse, successResponse, notFoundResponse } from '../../../../helpers/apiResponse'
-import { getOffset } from '../../../../helpers/utility'
+import { addUser,getUserInRoom } from '../../../../helpers/utility'
 import { sentPushNotification } from '../../../../lib/notification'
 import { authSocketToken }  from '../../../../middlewares/authorizationSocket'
 import { toLowerCase } from "fp-ts/lib/string";
@@ -58,15 +58,37 @@ export default class Socket {
                 console.log("join==",requestData)
                 let fromToken: any = requestData.fromToken;
                 let toToken : any = requestData.toToken;
+                let room : any = toToken;
                 let flag : boolean = false;
+                let toSokectId:any;
                 for (var i = userConnectionList.length - 1; i >= 0; --i) {
                         if (userConnectionList[i].qrCode == toToken) {
+                            toSokectId = userConnectionList[i].id;
                             flag = true;
                             continue;
                         }
                 }
+                //console.log(userConnectionList)
                 if(flag){
-                    io.to(socket.id).emit("join_room",{status:1,"message":"Room created",'response':requestData});
+                    const { error, user } = addUser(socket.id,room,fromToken)
+                    const { errors, users } = addUser(toSokectId,room,toToken)
+                    let roomArr: any =[];
+                    roomArr.push(user)
+                    roomArr.push(users)
+                    if (error) {
+                        io.to(socket.id).emit("join_room",{status:0,"message":error});
+                    }else if(errors){
+                        io.to(socket.id).emit("join_room",{status:0,"message":errors});
+                    }else{
+                        socket.join(user.room)
+                        //socket.join(user.room)
+                        socket.broadcast.to(user.room).emit("join_room",{status:1,"message":"Room created",'response':roomArr});
+                        io.to(user.room).emit("roomData",{status:1,"message":"Room created",'response': {
+                            room: user.room,
+                            users: getUserInRoom(user.room)
+                        }})
+                        //io.to(socket.id).emit("join_room",{status:1,"message":"Room created",'response':requestData});
+                    }
                 }else{
                     io.to(socket.id).emit("join_room",{status:0,"message":"Invalid QR code"});
                 }

@@ -1,3 +1,49 @@
+const users:any = []
+const newuser:any = []
+
+/** get offset */
+export const addUser = (id:any,room:any,username:any): any =>{
+   //clean the data
+
+   username = username.trim()
+   room = room.trim()
+
+   //vlidate data
+   if (!username || !room) {
+       return {
+           error: 'Username and room are required!'
+       }
+   }
+
+   //check for existing users
+   const existingUser = users.find((user: { room: any; username: any }) => {
+       return user.room == room && user.username == username
+   })
+
+   //va;idate username
+   if (existingUser) {
+       return {
+           error: "username iss already used"
+       }
+   }
+
+   //store user
+   const user = { id, username, room }
+   users.push(user)
+   return { user }
+}
+
+/** get offset */
+export const getUserInRoom = (room:any): any =>{
+    const u:any = []
+    users.filter((user: { room: any }) => {
+
+        user.room === room
+    })
+    console.log(users)
+    return users
+ }
+
 
 /** get offset */
 export const getOffset = (pageNo:number,limit:number): any =>{

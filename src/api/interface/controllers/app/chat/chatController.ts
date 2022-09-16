@@ -183,7 +183,17 @@ export default class Socket {
                 socket.to(id).emit("typing", {type:true});
             });
         
-
+            /**
+			 * To manage user message
+			 * @param {string} token
+			*/
+            socket.on('message', function(requestData:any){
+                console.log(requestData)
+                if(requestData.toUser != "" && requestData.fromUser){
+                    socket.to(requestData.toUser.id).emit("messageTo", requestData);
+                    io.to(requestData.fromUser.id).emit("messageFrom", requestData);
+                }
+            });
             
     }
 

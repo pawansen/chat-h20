@@ -29,21 +29,22 @@ export const generateQR = async (callback:any) =>{
     const url:any = env.BASE_URL+"?code=qrCode";
     const bufferImage = await QRCode.toDataURL(url,qrOption);
     let buf:any = Buffer.from(bufferImage.replace(/^data:image\/\w+;base64,/, ""),'base64')
-    // s3UploadBase64('qr-code',buf,fileName,(err:any,responseFile:any)=>{   
-    //     responseFile.QrCode =  qrCode;    
-    //     console.log(responseFile)  
-    //     callback(null,responseFile);
-    // })
-    callback(null,{
-        ETag: '"79644753e4048926b6d3e7c033017b17"',
-        Location: 'https://jom-app-local.s3.us-east-2.amazonaws.com/store/CHAT-QR-Nz0dzC761661506662.png',
-        key: 'store/CHAT-QR-Nz0dzC761661506662.png',
-        Key: 'store/CHAT-QR-Nz0dzC761661506662.png',
-        Bucket: 'jom-app-local',
-        QrCode: qrCode,
-        icon: "icon/"+Math.floor(Math.random() * (15 - 1 + 1) + 1)+".png"  
-      }
-      );
+    s3UploadBase64('qr-code',buf,fileName,(err:any,responseFile:any)=>{   
+        responseFile.QrCode =  qrCode;    
+        responseFile.icon =  "icon/"+Math.floor(Math.random() * (15 - 1 + 1) + 1)+".png";    
+        console.log(responseFile)  
+        callback(null,responseFile);
+    })
+    // callback(null,{
+    //     ETag: '"79644753e4048926b6d3e7c033017b17"',
+    //     Location: 'https://jom-app-local.s3.us-east-2.amazonaws.com/store/CHAT-QR-Nz0dzC761661506662.png',
+    //     key: 'store/CHAT-QR-Nz0dzC761661506662.png',
+    //     Key: 'store/CHAT-QR-Nz0dzC761661506662.png',
+    //     Bucket: 'jom-app-local',
+    //     QrCode: qrCode,
+    //     icon: "icon/"+Math.floor(Math.random() * (15 - 1 + 1) + 1)+".png"  
+    //   }
+    //   );
     
 }
 

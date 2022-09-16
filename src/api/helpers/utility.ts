@@ -2,9 +2,10 @@ const users:any = []
 const newuser:any = []
 
 /** get offset */
-export const addUser = (id:any,room:any,username:any): any =>{
-   const user = { id: id, username: username, room: room }
+export const addUser = (id:any,room:any,username:any,icon:any): any =>{
+   const user = { id: id, username: username, room: room, icon:icon }
    users.push(user)
+   console.log('users',users)
    return user
 }
 
@@ -19,8 +20,18 @@ export const removeUser = (id:any): any =>{
 
  /** get offset */
 export const findUser = (id:any): any =>{
+
+    for (var i = users.length - 1; i >= 0; --i) {
+        if (users[i].id == id) {
+            return users[i];
+        }
+   }
+ }
+
+  /** get offset */
+export const findUserUsername = (username:any): any =>{
     return users.find((user:any)=>{
-        user.id === id;
+        user.username == username;
       })
  }
 

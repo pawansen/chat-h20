@@ -40,7 +40,8 @@ export const generateQR = async (callback:any) =>{
         key: 'store/CHAT-QR-Nz0dzC761661506662.png',
         Key: 'store/CHAT-QR-Nz0dzC761661506662.png',
         Bucket: 'jom-app-local',
-        QrCode: qrCode
+        QrCode: qrCode,
+        icon: "icon/"+Math.floor(Math.random() * (15 - 1 + 1) + 1)+".png"  
       }
       );
     

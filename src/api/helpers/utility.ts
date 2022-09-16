@@ -3,35 +3,33 @@ const newuser:any = []
 
 /** get offset */
 export const addUser = (id:any,room:any,username:any): any =>{
-   //clean the data
-
-   username = username.trim()
-   room = room.trim()
-
-   //vlidate data
-   if (!username || !room) {
-       return {
-           error: 'Username and room are required!'
-       }
-   }
-
-   //check for existing users
-   const existingUser = users.find((user: { room: any; username: any }) => {
-       return user.room == room && user.username == username
-   })
-
-   //va;idate username
-   if (existingUser) {
-       return {
-           error: "username iss already used"
-       }
-   }
-
-   //store user
-   const user = { id, username, room }
+   const user = { id: id, username: username, room: room }
    users.push(user)
-   return { user }
+   return user
 }
+
+/** get offset */
+export const removeUser = (id:any): any =>{
+    const getID = (users: { id: any }) => users.id === id;
+    const index =  users.findIndex(getID);
+     if (index !== -1) {
+       return users.splice(index, 1)[0];
+     }
+ }
+
+ /** get offset */
+export const findUser = (id:any): any =>{
+    return users.find((user:any)=>{
+        user.id === id;
+      })
+ }
+
+   /** get offset */
+export const findUserByRoom = (room:any,username:any): any =>{
+    return users.find((user:any)=>{
+        user.room === room && user.username != username;
+      })
+ }
 
 /** get offset */
 export const getUserInRoom = (room:any): any =>{

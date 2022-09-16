@@ -28,5 +28,6 @@ export const env = {
     EMAIL_PASSWORD:process.env.EMAIL_PASSWORD,
     EMAIL_FROM_TEXT:process.env.EMAIL_FROM_TEXT,
     SANDGRID_API_KEY:process.env.TO_EMAIL,
-    TO_EMAIL:process.env.TO_EMAIL
+    TO_EMAIL:process.env.TO_EMAIL,
+    BASE_URL:process.env.BASE_URL
 }

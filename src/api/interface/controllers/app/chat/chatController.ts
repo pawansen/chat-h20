@@ -2,12 +2,13 @@ import { Request, Response } from "express"
 import {logger} from '../../../../lib/logger'
 import lan from '../../../../locales/en.json';
 import { ErrorResponse, successResponse, notFoundResponse } from '../../../../helpers/apiResponse'
-import { addUser,getUserInRoom } from '../../../../helpers/utility'
+import { addUser,getUserInRoom,removeUser,findUser,findUserByRoom } from '../../../../helpers/utility'
 import { sentPushNotification } from '../../../../lib/notification'
 import { authSocketToken }  from '../../../../middlewares/authorizationSocket'
 import { toLowerCase } from "fp-ts/lib/string";
 import { generateQR } from '../chat/qrController'
 import  mongoose  from 'mongoose'
+let thisRoom:any = "";
 /** Object id data type */
 const ObjectId = mongoose.Types.ObjectId;
 let userConnectionList: any = [];
@@ -45,7 +46,15 @@ export default class Socket {
                         userConnectionList.splice(i,1);
                     }
                 }
-                io.to(socket.id).emit("disconnect_data",{status:1,"message":lan['User status updated successfully'],'response':requestData});
+                const user = removeUser(socket.id);
+                if(user) {
+                  console.log(user.username + ' has left');
+                }
+                if(thisRoom != ""){
+                    io.to(thisRoom).emit("disconnect_data", {status:1,"message":"Left room",'response':user.username});
+                }else{
+                    io.to(socket.id).emit("disconnect_data",{status:1,"message":lan['User status updated successfully'],'response':requestData});
+                }
             });
             
 
@@ -54,13 +63,13 @@ export default class Socket {
              * @param {string} userId
              * @param {string} token
             */
-            socket.on('join_room', function(requestData:any){
+            socket.on('join_room', async function(requestData:any){
                 console.log("join==",requestData)
                 let fromToken: any = requestData.fromToken;
                 let toToken : any = requestData.toToken;
                 let room : any = toToken;
                 let flag : boolean = false;
-                let toSokectId:any;
+                var toSokectId:any;
                 for (var i = userConnectionList.length - 1; i >= 0; --i) {
                         if (userConnectionList[i].qrCode == toToken) {
                             toSokectId = userConnectionList[i].id;
@@ -68,32 +77,51 @@ export default class Socket {
                             continue;
                         }
                 }
-                //console.log(userConnectionList)
+                //console.log('toSokectId',toSokectId)
                 if(flag){
-                    const { error, user } = addUser(socket.id,room,fromToken)
-                    const { errors, users } = addUser(toSokectId,room,toToken)
+                    const user  = await addUser(socket.id,room,fromToken)
+                    const users  = await addUser(toSokectId,room,toToken)
+
                     let roomArr: any =[];
                     roomArr.push(user)
                     roomArr.push(users)
-                    if (error) {
-                        io.to(socket.id).emit("join_room",{status:0,"message":error});
-                    }else if(errors){
-                        io.to(socket.id).emit("join_room",{status:0,"message":errors});
-                    }else{
-                        socket.join(user.room)
-                        //socket.join(user.room)
-                        socket.broadcast.to(user.room).emit("join_room",{status:1,"message":"Room created",'response':roomArr});
-                        io.to(user.room).emit("roomData",{status:1,"message":"Room created",'response': {
-                            room: user.room,
-                            users: getUserInRoom(user.room)
-                        }})
-                        //io.to(socket.id).emit("join_room",{status:1,"message":"Room created",'response':requestData});
-                    }
+   
+                    socket.join(user.room)
+                    //socket.join(user.room)
+
+                    thisRoom = user.room;
+                    //console.log('thisRoom',thisRoom)
+                    //console.log('thisRoom',roomArr)
+                    io.to(socket.id).emit("roomData", users);
+                    socket.to(toSokectId).emit("roomData", user);
+                    // socket.emit('roomData' , {status:1,"message":"roomData created",'response':users});
+                    // io.to(thisRoom).emit("joined", {status:1,"message":"joined created",'response':users});
+                    
                 }else{
                     io.to(socket.id).emit("join_room",{status:0,"message":"Invalid QR code"});
                 }
 
             });
+
+            /**
+			 * To manage join_room_sender
+			 * @param {string} userId
+			 * @param {string} token
+			*/
+            socket.on("join_room_sender", (requestData:any) => {
+                thisRoom = requestData.room;
+                socket.join(thisRoom)
+                io.to(socket.id).emit('receiverRoomData' , {status:1,"message":"receiverRoomData created",'response':findUserByRoom(thisRoom,requestData.username)});
+            });
+
+            /**
+			 * To manage user chatMessage
+			 * @param {string} userId
+			 * @param {string} token
+			*/
+            socket.on("chatMessage", (requestData:any) => {
+                io.to(thisRoom).emit("chatMessage", {data:requestData,id : socket.id});
+              });
 
             
             /**

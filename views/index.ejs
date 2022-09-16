@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Index Page</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.0.2/socket.io.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 </head>
@@ -53,7 +54,9 @@
 	<section class="sec2">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-3 pr-md-0">
+			   <div class="col-md-12">
+			   	<div class="customrow">
+			   			<div class="leftSec">
 					<div class="chatlist">
 						<div class="px-3 pt-3">
 							<div class="chatg">
@@ -69,7 +72,22 @@
 									</div>
 								</div>
 								<ul class="list-unstyled chat-list chat-user-list">
-                                        <li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="d-flex">                            
+                                                <div class="chat-user-img online align-self-center me-3 ms-0">
+                                                    <img src="img/avatar-2.jpg" class="rounded-circle avatar-xs" alt="">
+                                                    <span class="user-status"></span>
+                                                </div>
+                        
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="text-truncate font-size-15 mb-1">Patrick Hendricks</h5>
+                                                    <p class="chat-user-message text-truncate mb-0">Hey! there I'm available</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                        <!-- <li>
                                             <a href="#">
                                                 <div class="d-flex">                            
                                                     <div class="chat-user-img online align-self-center me-3 ms-0">
@@ -83,9 +101,26 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                        </li>
+                                        </li> -->
     
-                                        <li class="unread">
+                                        <!-- <li class="unread">
+                                            <a href="#">
+                                                <div class="d-flex">
+                                                    <div class="chat-user-img away align-self-center me-3 ms-0">
+                                                        <img src="img/avatar-3.jpg" class="rounded-circle avatar-xs" alt="">
+                                                        <span class="user-status"></span>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <h5 class="text-truncate font-size-15 mb-1">Mark Messer</h5>
+                                                        <p class="chat-user-message text-truncate mb-0"><i class="ri-image-fill align-middle me-1 ms-0"></i> Images</p>
+                                                    </div>        
+                                                    <div class="unread-message">
+                                                        <span class="badge badge-soft-danger rounded-pill">02</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                            <li class="unread">
                                             <a href="#">
                                                 <div class="d-flex">
                                                     <div class="chat-user-img away align-self-center me-3 ms-0">
@@ -103,6 +138,7 @@
                                             </a>
                                         </li>
     
+    
                                         <li>
                                             <a href="#">
                                                 <div class="d-flex">
@@ -207,153 +243,100 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                        </li>
+                                        </li> -->
 
                                     </ul>
 							</div>
 					</div>
 				</div>
-				<div class="col-md-6 px-md-0">
-              <div class="chat-conversation">
-              						<div class="user-chat">
-						 <div class="userde">
-						 	<div class="me-3">
-						 		<img src="img/gh.png" class="rounded-circle avatar-xs" alt="chatvia">
-						 	 </div>
-						 	  <div class="mes">
-						 	  	<h5 class="mb-0">Jason Susanto</h5>
-						 	 <span>Typing...</span>
-						 	  </div>
-						 </div>
-					</div>
-					<div class="typingchat">
-						<ul class="tr1-main">
-							<li class="left chat-l">
-						     <div class="chat-l2">
-						     			<div class="chr-g">
-									<p class="mb-0 messages">When are you coming ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-						     </div>
-							</li>
-							<li class="right chat-1">
-								  <div class="chat-l2">
-								<div class="chr-g">
-									<p class="mb-0 messages">Hi Dear, I’ll be there by 7:30 pm, btw where are u ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-							</div>
-							</li>
-														<li class="right chat-1">
-								  <div class="chat-l2">
-								<div class="chr-g">
-									<p class="mb-0 messages">Hi Dear, I’ll be there by 7:30 pm, btw where are u ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-							</div>
-							</li>
-																					<li class="right chat-1">
-								  <div class="chat-l2">
-								<div class="chr-g">
-									<p class="mb-0 messages">Hi Dear, I’ll be there by 7:30 pm, btw where are u ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-							</div>
-							</li>
-												<li class="left chat-l">
-						     <div class="chat-l2">
-						     			<div class="chr-g">
-									<p class="mb-0 messages">When are you coming ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-						     </div>
-							</li>
-																												<li class="right chat-1">
-								  <div class="chat-l2">
-								<div class="chr-g">
-									<p class="mb-0 messages">Hi Dear, I’ll be there by 7:30 pm, btw where are u ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-							</div>
-							</li>
-												<li class="left chat-l">
-						     <div class="chat-l2">
-						     			<div class="chr-g">
-									<p class="mb-0 messages">When are you coming ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-						     </div>
-							</li>
-												<li class="left chat-l">
-						     <div class="chat-l2">
-						     			<div class="chr-g">
-									<p class="mb-0 messages">When are you coming ?</p>
-								</div>
-								<div class="time">
-									<span class="align-middle">10:05 AM</span>
-								</div>
-						     </div>
-							</li>
-						</ul>
-											<div class="submited">
-						<div class="chat-input-section mb-0">
-                         <div class="container-fluid">
-                         	   <div class="row g-0">
-                                <div class="col">
-                                    <input type="text" class="form-control form-control-lg bg-light border-light" placeholder="Type Somthing.......">
-                                </div>
-                                <div class="col-auto">
-                                    <div class="chat-input-links ms-md-2 me-md-0">
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                              <img src="img/aq1.png" class="img1">
-                                            </li>
-                                            <li class="list-inline-item">
-                                              <img src="img/f2.png" class="img1">
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <button type="submit" class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light">Send <img src="img/f3.png">
-                                                </button>
-                                            </li>
-                                        </ul>
+				<!-- <div class="centerSec centerSec2">
+                 <div id="step_div"><div id="svgPrnt"><div><img src="img/chat.040dfe9b502a6482bbf82ea4148ce8e6.svg" id="mainsvg"><p class="dark:dark-text"><b>Click</b> on New Conversion Button Or <b>Share</b> Your Id To Your Partner.</p></div></div></div>
+				</div> -->
+                <div class="centerSec">
+                    <div class="chat-conversation">
+                            <div class="user-chat">
+                               <div class="userde">
+                                   <div class="me-3">
+                                       <img src="img/gh.png" class="rounded-circle avatar-xs" alt="chatvia">
                                     </div>
-                                    
-                                </div>
-                            </div>
-                         </div>
-                        </div>
-					</div>
-					</div>
-              </div>
-				</div>
-				<div class="col-md-3 pl-md-0">
+                                     <div class="mes">
+                                         <h5 class="mb-0">Jason Susanto</h5>
+                                    <span>Typing...</span>
+                                     </div>
+                               </div>
+                          </div>
+                          <div class="typingchat">
+                              <ul class="tr1-main">
+                                <li class="left chat-l">
+                                    <div class="chat-l2">
+                                                <div class="chr-g">
+                                           <p class="mb-0 messages">When are you coming ?</p>
+                                       </div>
+                                       <div class="time">
+                                           <span class="align-middle">10:05 AM</span>
+                                       </div>
+                                    </div>
+                                   </li>
+                                   <li class="right chat-1">
+                                    <div class="chat-l2">
+                                  <div class="chr-g">
+                                      <p class="mb-0 messages">Hi Dear, I’ll be there by 7:30 pm, btw where are u ?</p>
+                                  </div>
+                                  <div class="time">
+                                      <span class="align-middle">10:05 AM</span>
+                                  </div>
+                              </div>
+                              </li>
+                              </ul>
+                             <div class="submited">
+                              <div class="chat-input-section mb-0">
+                               <div class="container-fluid">
+                                      <div class="row g-0">
+                                      <div class="col">
+                                          <input type="text" class="form-control form-control-lg bg-light border-light" placeholder="Type Somthing.......">
+                                      </div>
+                                      <div class="col-auto">
+                                          <div class="chat-input-links ms-md-2 me-md-0">
+                                              <ul class="list-inline mb-0">
+                                                  <li class="list-inline-item">
+                                                    <img src="img/aq1.png" class="img1">
+                                                  </li>
+                                                  <li class="list-inline-item">
+                                                    <img src="img/f2.png" class="img1">
+                                                  </li>
+                                                  <li class="list-inline-item">
+                                                      <button type="submit" class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light">Send <img src="img/f3.png">
+                                                      </button>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          
+                                      </div>
+                                  </div>
+                               </div>
+                              </div>
+                          </div>
+                          </div>
+                    </div>
+                      </div>
+				<div class="rightSec">
 					<div class="qrsec">
 					  <div class="qrsec-inner">
 					  	<h5>Your Details</h5>
-					  	<div class="qrsec1">
-					  		<img src="img/qr.png">
+					  	<div class="qrsec1" id="qrCodeImage">
+					  		<!-- <img src="img/qr.png"> -->
 					  	</div>
 					  	<div class="chat-l25">
-					  		<a href="#" class="uide">Your ID:GH8482</a>
-					  		<p class="mb-0 text-center"><img src="img/user5.png" class="user"></p>
+					  		<a href="#" class="uide">Your ID: <span id="qrCode"></span></a>
+					  		<p class="mb-0 text-center" id="autogentImage">
+                                <!-- <img src="img/user5.png" class="user"> -->
+                            </p>
 					  	</div>
 					  </div>
 					</div>
 				</div>
+			   	</div>
+			   </div>
 			</div>
 		</div>
 	</section>
@@ -379,6 +362,7 @@
 </footer>
 <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">>
   <div class="modal-dialog">
+    <form>
     <div class="modal-content">
       <div class="modal-header border-0">
          <span data-dismiss="modal" aria-label="Close"><img src="img/cross.png"></span>
@@ -388,14 +372,75 @@
         	  <img src="img/Unddddtitled-1.png">
         </div>
         <div class="tresb">
-           	<input type="" name="" class="form-control" placeholder="Enter Opponent ID">
-           	<span><img src="img/plus.png"></span>
+            <input type="hidden" name="fromId" id="fromId" class="form-control" placeholder="Enter Remote ID">
+           	<input type="" name="id" id="QrId" class="form-control" placeholder="Enter Opponent ID">
+           	<span><img src="img/plus.png" onclick="submitRoom()"></span>
+               <!-- <button type="submit" class="submit"><img src="img/plus.png"></button> -->
         </div>
       </div>
     </div>
+</form>
   </div>
 </div>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script>
+			var socket = io.connect('http://localhost:3000');
+            //var socket = io.connect('http://159.223.51.198:3000');
+
+            var typing=false;
+            var timeout=undefined;
+            var user;
+            // submit text message without reload/refresh the page
+            $('form').submit(function(e){
+                e.preventDefault(); // prevents page reloading
+                return false;
+            });
+
+            /** generate room*/
+            function submitRoom() {
+                socket.emit('join_room', {fromToken:$('#fromId').val(),toToken:$('#QrId').val()});
+                $('#exampleModal').modal('hide');
+            }
+
+            socket.on('join_room', function(msg){
+                console.log('join_room join_room');
+                 //console.log(msg);
+            });
+
+            socket.on('roomData', function(data){
+                 socket.emit('join_room_sender', data);
+                 //console.log('roomData roomData');
+                // console.log(data);
+            });
+
+            socket.on('receiverRoomData', function(data){
+                console.log('receiverRoomData joinreceiverRoomDataed');
+                 console.log(data);
+            });
+
+            socket.on('joined', function(msg){
+               // console.log('joined joined joined');
+                // console.log(msg);
+            });
+
+             /** generate qr code*/
+            socket.emit('qr_code', {}); 
+            socket.on("qr_code",function(qrCode){
+                console.log(qrCode)
+                $('#qrCodeImage').html("<img src="+qrCode.response.QrImage+"></>");
+                $('#qrCode').text(qrCode.response.QrCode);
+                $('#fromId').val(qrCode.response.QrCode);
+            })
+
+            /** generate random image*/
+            function randomIntFromInterval(min, max) { // min and max included 
+                return Math.floor(Math.random() * (max - min + 1) + min)
+            }
+            $('#autogentImage').html("<img src='icon/"+randomIntFromInterval(1, 15)+".png'></>");
+
+
+                                                                                             
+    </script>
 </body>
 </html>

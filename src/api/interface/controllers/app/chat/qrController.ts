@@ -5,6 +5,7 @@ import QRCode from 'qrcode'
 import { s3Upload, s3UploadBase64 } from '../../../../lib/awsS3'
 import { randomNumber,randomString } from '../../../../helpers/utility'
 import { ErrorResponse, successResponse, notFoundResponse } from '../../../../helpers/apiResponse'
+import { env } from "../../../../../infrastructure/env";
 
   /**
      * generate qr code
@@ -25,10 +26,12 @@ export const generateQR = async (callback:any) =>{
     }
     const qrCode:any = randomNumber(6);
     const fileName = "CHAT-QR-"+qrCode+".png";
-    const bufferImage = await QRCode.toDataURL(qrCode,qrOption);
+    const url:any = env.BASE_URL+"?code=qrCode";
+    const bufferImage = await QRCode.toDataURL(url,qrOption);
     let buf:any = Buffer.from(bufferImage.replace(/^data:image\/\w+;base64,/, ""),'base64')
     // s3UploadBase64('qr-code',buf,fileName,(err:any,responseFile:any)=>{   
-    //     responseFile.QrCode =  qrCode;      
+    //     responseFile.QrCode =  qrCode;    
+    //     console.log(responseFile)  
     //     callback(null,responseFile);
     // })
     callback(null,{
